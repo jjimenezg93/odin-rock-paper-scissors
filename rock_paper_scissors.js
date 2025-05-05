@@ -1,8 +1,5 @@
 const kPlayOptions = ["Rock", "Paper", "Scissors"];
 
-let humanScore = 0;
-let computerScore = 0;
-
 function getComputerChoice() {
   let randIdx = Math.floor(Math.random() * 3);
   console.assert(
@@ -33,27 +30,48 @@ function getHumanChoice() {
   return userOption;
 }
 
-function playRound(computerChoice, humanChoice) {
-  if (computerChoice === humanChoice) {
-    console.log("It's a draw");
-    return;
+function playGame() {
+  let humanScore = 0;
+  let computerScore = 0;
+
+  console.log("Results: Human vs AI");
+
+  function playRound(computerChoice, humanChoice) {
+    if (computerChoice === humanChoice) {
+      console.log("It's a draw");
+      return -1;
+    }
+    let bComputerWins = computerChoice === (humanChoice + 1) % 3;
+    if (bComputerWins) {
+      computerScore++;
+      console.log("AI player wins!");
+      return;
+    }
+    humanScore++;
+    console.log("Human player wins!");
   }
-  let bComputerWins = computerChoice === (humanChoice + 1) % 3;
-  if (bComputerWins) {
-    computerScore++;
-    console.log("AI player wins!");
-    return;
+  let currentRound = 0;
+  while (currentRound < 5) {
+    let humanChoice = getHumanChoice();
+    if (humanChoice === -1) {
+      console.log(
+        "Can't play this round because the human choice is invalid. Try again"
+      );
+      continue;
+    }
+    let computerChoice = getComputerChoice();
+    console.log(
+      `Round ${currentRound + 1}: ${kPlayOptions[humanChoice]} vs ${
+        kPlayOptions[computerChoice]
+      } `
+    );
+    if (playRound(computerChoice, humanChoice) !== -1) {
+      // Not a draw, so we can count this round
+      currentRound++;
+    }
   }
-  humanScore++;
-  console.log("Human player wins!");
+
+  console.log(`Final score: ${humanScore} - ${computerScore}`);
 }
 
-let humanChoice = getHumanChoice();
-if (humanChoice === -1) {
-  console.log("Can't play the game because the human choice is invalid");
-} else {
-  console.log("Human player's choice: " + kPlayOptions[humanChoice]);
-  let computerChoice = getComputerChoice();
-  console.log("AI player's choice: " + kPlayOptions[computerChoice]);
-  playRound(computerChoice, humanChoice);
-}
+playGame();
