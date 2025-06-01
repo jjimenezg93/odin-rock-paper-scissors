@@ -2,12 +2,16 @@ const kPlayOptions = ["Rock", "Paper", "Scissors"];
 
 let winnerScore = 5;
 
-let humanScore = 0;
+let playerScore = 0;
 let computerScore = 0;
+
+let resetBtnElement = document.querySelector("#btn-reset");
 
 let playerScoreElement = document.querySelector("p.player.score");
 let computerScoreElement = document.querySelector("p.computer.score");
-let resetBtnElement = document.querySelector("#btn-reset");
+
+let playerScoreTextElement = document.querySelector("#player-score");
+let computerScoreTextElement = document.querySelector("#computer-score");
 
 let playerChoiceBtnsList = [];
 
@@ -23,13 +27,21 @@ function finishGame() {
     element.classList.add("disabled");
     element.disabled = true;
   });
+
+  if (playerScore > computerScore) {
+    playerScoreTextElement.classList.add("winner");
+    computerScoreTextElement.classList.add("loser");
+  } else {
+    playerScoreTextElement.classList.add("loser");
+    computerScoreTextElement.classList.add("winner");
+  }
 }
 
 function updateScore() {
-  playerScoreElement.textContent = humanScore;
+  playerScoreElement.textContent = playerScore;
   computerScoreElement.textContent = computerScore;
 
-  if (humanScore == winnerScore) {
+  if (playerScore == winnerScore) {
     onPlayerWins();
     finishGame();
   } else if (computerScore == winnerScore) {
@@ -47,74 +59,23 @@ function getComputerChoice() {
   return randIdx;
 }
 
-// Step 5 requests that you let the user write the option
-// and use toLowerCase. I'm skipping that as I prefer to
-// use array + index.
-function getHumanChoice() {
-  let message = "Choose an option";
-  kPlayOptions.forEach((element, idx) => {
-    message += `\n${idx}: ${element}`;
-  });
-  const kRandOptionIdx = kPlayOptions.length;
-  message += `\n${kRandOptionIdx}: Random`;
-
-  let userOption = parseInt(prompt(message));
-  if (isNaN(userOption) || userOption < 0 || userOption > kRandOptionIdx) {
+function playRound(computerChoice, playerChoice) {
+  if (computerChoice === playerChoice) {
     return -1;
   }
-  if (userOption == kRandOptionIdx) {
-    return getComputerChoice();
-  }
-  return userOption;
-}
-
-function playGame() {
-  console.log("Results: Human vs AI");
-
-  let currentRound = 0;
-  while (currentRound < 5) {
-    let humanChoice = getHumanChoice();
-    if (humanChoice === -1) {
-      console.log(
-        "Can't play this round because the human choice is invalid. Try again"
-      );
-      continue;
-    }
-    let computerChoice = getComputerChoice();
-    console.log(
-      `Round ${currentRound + 1}: ${kPlayOptions[humanChoice]} vs ${
-        kPlayOptions[computerChoice]
-      } `
-    );
-    if (playRound(computerChoice, humanChoice) !== -1) {
-      // Not a draw, so we can count this round
-      currentRound++;
-    }
-  }
-
-  console.log(`Final score: ${humanScore} - ${computerScore}`);
-}
-
-function playRound(computerChoice, humanChoice) {
-  if (computerChoice === humanChoice) {
-    console.log("It's a draw");
-    return -1;
-  }
-  let bComputerWins = computerChoice === (humanChoice + 1) % 3;
+  let bComputerWins = computerChoice === (playerChoice + 1) % 3;
   if (bComputerWins) {
     computerScore++;
-    console.log("AI player wins!");
     return;
   }
-  humanScore++;
-  console.log("Human player wins!");
+  playerScore++;
 }
 
 function resetGame() {
   resetBtnElement.classList.add("disabled");
   resetBtnElement.disabled = true;
 
-  humanScore = 0;
+  playerScore = 0;
   computerScore = 0;
   updateScore();
 
@@ -122,10 +83,12 @@ function resetGame() {
     element.classList.remove("disabled");
     element.disabled = false;
   });
+
+  playerScoreTextElement.classList.remove("winner", "loser");
+  computerScoreTextElement.classList.remove("winner", "loser");
 }
 
 function onPlayerSelectedChoice(choiceName) {
-  console.log(`Player selected ${choiceName}`);
   playRound(getComputerChoice(), kPlayOptions.indexOf(choiceName));
   updateScore();
 }
@@ -164,7 +127,6 @@ function createChoices(parentNode) {
 }
 
 let choiceListNodes = document.querySelectorAll("ul.choices");
-console.log(choiceListNodes);
 
 choiceListNodes.forEach((element, key, parent) => {
   createChoices(element);

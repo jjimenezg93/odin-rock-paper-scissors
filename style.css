@@ -27,6 +27,21 @@ header > h1 {
   padding: 10px 20px;
 }
 
+#player-score,
+#computer-score {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.winner {
+  color: green;
+}
+
+.loser {
+  color: red;
+}
+
 #game {
   display: flex;
   flex-direction: column;
@@ -54,5 +69,5 @@ header > h1 {
 }
 
 .player button:hover:enabled {
-    background-color: grey;
+  background-color: grey;
 }
