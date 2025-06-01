@@ -1,8 +1,8 @@
 # Rock-Paper-Scissors
 
-This is the solution to the [Rock-Paper-Scissors (console)][1] project of the JavaScript basics section in the [Foundations][2] course of The Odin Project.
+This is the GUI solution to the [Revisiting Rock-Paper-Scissors][1] project of the JavaScript basics section in the [Foundations][2] course of The Odin Project.
 
-[1]: https://www.theodinproject.com/lessons/foundations-rock-paper-scissors
+[1]: https://www.theodinproject.com/lessons/foundations-revisiting-rock-paper-scissors
 [2]: https://www.theodinproject.com/paths/foundations/courses/foundations#javascript-basics
 
 # Attributions
